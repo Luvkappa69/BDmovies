@@ -43,7 +43,10 @@
               </select>
             </div>
          
-         
+            <div class="col-md-6">
+                                <label for="capa" class="form-label">Capa do filme</label>
+                                <input type="file" class="form-control" id="capa">
+                            </div>
 
 
           <div class="col-12">

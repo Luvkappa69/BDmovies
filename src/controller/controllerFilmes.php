@@ -8,6 +8,7 @@ if($_POST['op'] == 1){
                                                 $_POST['idImbd'], 
                                                 $_POST['nome'], 
                                                 $_POST['ano'], 
+                                                $_FILES, 
                                                 $_POST['codigoClassificacao']
     );
     echo($resultado);
@@ -24,11 +25,17 @@ if($_POST['op'] == 1){
                                                 $_POST['idImbd']                                               
     );
     echo($resultado);
+}else if($_POST['op'] == 8){
+    $resultado = $filme -> getInfoFilme(
+                                                $_POST['idImbd']                                               
+    );
+    echo($resultado);
 }else if($_POST['op'] == 5){
     $resultado = $filme -> editaFilme(
                                                 $_POST['idImbd'], 
                                                 $_POST['nome'], 
-                                                $_POST['ano'], 
+                                                $_POST['ano'],
+                                                $_FILES, 
                                                 $_POST['codigoClassificacao'],
                                                 $_POST['old_key']
     );

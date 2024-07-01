@@ -8,15 +8,32 @@
                                 $idImbd,
                                 $nome,
                                 $ano,
+                                $capa,
                                 $calss
                                 ) {
             global $conn;
             $msg = "";
             $stmt = "";
 
+            $folder = $nome;
+            $upload = $this -> uploads(
+                $capa,                    //Content
+                'capa',            //Js into PHP variable name
+                "_CAPA",                  //Nome do ficheiro
+                $folder                   //Pasta
+                );
+            $upload = json_decode($upload, TRUE);
 
-                
-            $stmt = $conn->prepare("INSERT INTO filme (idImbd,nome,ano,codigoClassificacao) 
+
+            if($upload['flag']){
+                $stmt = $conn->prepare("INSERT INTO filme (idImbd, nome, ano, codigoClassificacao, capa) 
+                VALUES (?, ?, ?, ?, ?);");
+                $stmt->bind_param("ssiss", $idImbd,
+                $nome,
+                $ano,
+                $calss, $upload['target']);
+            }else{
+                $stmt = $conn->prepare("INSERT INTO filme (idImbd, nome, ano, codigoClassificacao) 
             VALUES (?, ?, ?, ?)");
         
             $stmt->bind_param("isii", 
@@ -25,6 +42,9 @@
                                         $ano,
                                         $calss
                                         );
+            }
+                
+            
         
             if ($stmt->execute()) {
                 $msg = "Registado com sucesso!";
@@ -56,14 +76,15 @@
             $msg .= "<thead>";
             $msg .= "<tr>";
         
-            $msg .= "<th>ID IMDB</th>";
+
             $msg .= "<th>Nome</th>";
             $msg .= "<th>Ano</th>";
-            $msg .= "<th>Classificação</th>";
+
 
         
             $msg .= "<td>Remover</td>";
             $msg .= "<td>Editar</td>";
+            $msg .= "<td>Info</td>";
         
             $msg .= "</tr>";
             $msg .= "</thead>";
@@ -82,10 +103,8 @@
                         while ($row = $result->fetch_assoc()) {
                             $msg .= "<tr>";
 
-                            $msg .= "<th scope='row'>" . $row['idImbd'] . "</th>";
-                            $msg .= "<td>" . $row['nome'] . "</td>";
+                            $msg .= "<td scope='row'> " . $row['nome'] . "</td>";
                             $msg .= "<td>" . $row['ano'] . "</td>";
-                            $msg .= "<td>" . $row['descricaoFilme'] . "</td>";
 
 
                             session_start();
@@ -98,6 +117,7 @@
 
                             }
                             $msg .= "<td><button type='button' class='btn btn-primary' onclick='editaFilme(" . $row['idImbd'] . ")'>Editar</button></td>";
+                            $msg .= "<td><button type='button' class='btn btn-info' onclick='showFilme(" . $row['idImbd'] . ")'>+Info</button></td>";
                             $msg .= "</tr>";
                         }
                         $result->free(); 
@@ -198,6 +218,41 @@
             
             return json_encode($row);  
         }
+
+
+
+
+
+
+
+        function getInfoFilme($codigo) {
+            global $conn;
+
+
+            $stmt = $conn->prepare("SELECT * FROM filme WHERE idImbd = ?");
+            $stmt->bind_param("i", $codigo);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $stmt->close();
+
+            if ($row) {
+                $codigoClassificacao = $row['codigoClassificacao'];
+                $stmt = $conn->prepare("SELECT descricao FROM classificacao WHERE codigo = ?");
+                $stmt->bind_param("i", $codigoClassificacao);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $classificacaoRow = $result->fetch_assoc();
+                $stmt->close();
+
+                if ($classificacaoRow) {
+                    $row['codigoClassificacao'] = $classificacaoRow['descricao'];
+                }
+            }
+            $conn->close();
+
+            return json_encode($row);  
+        }
         
 
 
@@ -210,42 +265,64 @@
 
 
         function editaFilme( 
-            $idImbd,
-            $nome,
-            $ano,
-            $calss,
-            $oldKEY
+                            $idImbd,
+                            $nome,
+                            $ano,
+                            $capa,
+                            $calss,
+                            $oldKEY
             ) {
             global $conn;
           
             $msg = "";
             $stmt = "";
-        
-            $stmt = $conn->prepare("UPDATE filme SET 
+
+            $folder = $nome;
+            $upload = $this -> uploads(
+                $capa,                    //Content
+                'capa',            //Js into PHP variable name
+                "_CAPA",                  //Nome do ficheiro
+                $folder                   //Pasta
+                );
+            $upload = json_decode($upload, TRUE);
+
+
+            if($upload['flag']){
+                $stmt = $conn->prepare("UPDATE filme SET 
+                                    idImbd = ?,
+                                    nome = ?,
+                                    ano = ?,
+                                    capa = ?,
+                                    codigoClassificacao = ?");
+                $stmt->bind_param("ssiss", 
+                                            $idImbd,
+                                            $nome,
+                                            $ano,
+                                            $upload['target'],
+                                            $calss, );
+            }else{
+                $stmt = $conn->prepare("UPDATE filme SET 
                                     idImbd = ?,
                                     nome = ?,
                                     ano = ?,
                                     codigoClassificacao = ?
 
                                     WHERE idImbd = ? ;");
-        
-            if ($stmt) { 
                 $stmt->bind_param("isiii",            
-                $idImbd,
-                $nome,
-                $ano,
-                $calss,
-                $oldKEY);
-        
-                if ($stmt->execute()) {
-                    $msg = "Edição efetuada";
-                } else {
-                    $msg = "Erro ao editar: " . $stmt->error; 
-                }
-                $stmt->close(); 
-            } else {
-                $msg = "Erro ao preparar a declaração: " . $conn->error;  
+                                        $idImbd,
+                                        $nome,
+                                        $ano,
+                                        $calss,
+                                        $oldKEY);
             }
+    
+            if ($stmt->execute()) {
+                $msg = "Edição efetuada";
+            } else {
+                $msg = "Erro ao editar: " . $stmt->error; 
+            }
+            $stmt->close(); 
+
 
             $conn->close();
         
@@ -275,6 +352,53 @@
             $conn->close();
             
             return $msg;
+        }
+
+
+        function uploads($img, $html_soul, $presetName, $pasta){
+
+            $dir = "../imagens/".$pasta."/";
+            $dir1 = "src/imagens/".$pasta."/";
+            $flag = false;
+            $targetBD = "";
+        
+            if(!is_dir($dir)){
+                if(!mkdir($dir, 0777, TRUE)){
+                    die ("Erro não é possivel criar o diretório");
+                }
+            }
+        
+            if(array_key_exists($html_soul, $img)){
+                if(is_array($img)){
+                    if(is_uploaded_file($img[$html_soul]['tmp_name'])){
+                        $fonte = $img[$html_soul]['tmp_name'];
+                        $ficheiro = $img[$html_soul]['name'];
+                        $end = explode(".",$ficheiro);
+                        $extensao = end($end);
+                
+                        $newName =$presetName.date("YmdHis").".".$extensao;
+                
+                        $target = $dir.$newName;
+                        $targetBD = $dir1.$newName;
+        
+                        $this -> wFicheiro($target);
+                
+                        $flag = move_uploaded_file($fonte, $target);
+                        
+                    } 
+                }
+            }
+            return (json_encode(array(
+                "flag" => $flag,
+                "target" => $targetBD
+            )));
+        }
+        
+        function wFicheiro($texto){
+            $file = '../upload_logs.txt';
+            $current = file_get_contents($file);
+            $current .= $texto."\n";
+            file_put_contents($file, $current);
         }
     }
 

@@ -16,6 +16,7 @@ function regista_Filme() {
   dados.append('idImbd', $('#idImbd').val());
   dados.append('nome', $('#nome').val());
   dados.append('ano', $('#ano').val());
+  dados.append('capa', $('#capa').prop('files')[0]); //image 🖼️
   dados.append('codigoClassificacao', $('#codigoClassificacao').val());
 
   
@@ -135,6 +136,7 @@ function removerFilme(key) {
 
 
 
+
 function editaFilme(key) {
 
   let dados = new FormData();
@@ -153,14 +155,54 @@ function editaFilme(key) {
 
     .done(function (msg) {
       let obj = JSON.parse(msg);
+      
 
+      $('#capaFilme').attr("src", obj.capa);
       $('#idImbdEdit').val(obj.idImbd);
       $('#nomeEdit').val(obj.nome);
       $('#anoEdit').val(obj.ano);
+      dados.append('capa', $('#capaEdit').prop('files')[0]); //image 🖼️
       $('#codigoClassificacaoEdit').val(obj.codigoClassificacao);
  
       $('#editModalFilme').modal('toggle');
       $('#btnGuardarEditFilme').attr('onclick', 'guardaEditfilme(' + obj.idImbd + ')')
+    })
+ 
+    .fail(function (jqXHR, textStatus) {
+      alert("Request failed: " + textStatus);
+    });
+}
+
+
+function showFilme (key) {
+
+  let dados = new FormData();
+  dados.append('op', 8);
+  dados.append('idImbd', key);
+
+  $.ajax({
+    url: controllerPath,
+    method: "POST",
+    data: dados,
+    dataType: "html",
+    cache: false,
+    contentType: false,
+    processData: false,
+  })
+
+    .done(function (msg) {
+      let obj = JSON.parse(msg);
+      
+      $('#capaFilmeInfo').attr('src', obj.capa);
+
+      $('#idImbdInfo').val(obj.idImbd);
+      $('#nomeInfo').val(obj.nome);
+      $('#anoInfo').val(obj.ano);
+
+      $('#codigoClassificacaoInfo').val(obj.codigoClassificacao);
+ 
+      $('#infoModalInfoFilme').modal('toggle');
+
     })
  
     .fail(function (jqXHR, textStatus) {

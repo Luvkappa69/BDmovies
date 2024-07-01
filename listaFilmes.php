@@ -23,6 +23,7 @@
     </div>
     
     <?php include_once 'assets/filmesModal.html' ?>
+    <?php include_once 'assets/infoFilmesModal.html' ?>
 </body>
 </html>
 <?php 
