@@ -415,7 +415,6 @@
         function pesquisa($idFilme) {
             global $conn;
         
-            // First query to get all sessions
             $stmt = $conn->prepare("SELECT * FROM sessao WHERE sessao.idImbdFilme = ?");
             $stmt->bind_param("i", $idFilme);
             $stmt->execute();
@@ -424,7 +423,7 @@
             $sessoes = [];
         
             while ($sessao = $result->fetch_assoc()) {
-                // Second query to get the cinema name for each session
+
                 $codigoSala = $sessao['codigoSala'];
                 $stmtCinema = $conn->prepare("SELECT nome_cinema FROM cinema WHERE codigo = ?");
                 $stmtCinema->bind_param("i", $codigoSala);
@@ -433,11 +432,10 @@
                 $resultCinema = $stmtCinema->get_result();
                 $cinema = $resultCinema->fetch_assoc();
         
-                // Combine session data with cinema name
                 if ($cinema) {
                     $sessao['nome_cinema'] = $cinema['nome_cinema'];
                 } else {
-                    $sessao['nome_cinema'] = null; // Or some default value if cinema not found
+                    $sessao['nome_cinema'] = null; 
                 }
         
                 $sessoes[] = $sessao;
