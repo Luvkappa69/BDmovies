@@ -84,11 +84,9 @@ class Login{
         date_default_timezone_set('Europe/Lisbon');
         $current_time = date('Y-m-d H:i:s');
         $log = $row['id']."-".$row['user']."-".$current_time;
-        //log_login
-        $file = '../login_logs.txt';
-        $current = file_get_contents($file);
-        $current .= $log."\n";
-        file_put_contents($file, $current);
+
+        $this -> log_Login($log);
+
         return (json_encode(array(
             "msg" => $msg,
             "flag" => $flag
@@ -171,12 +169,25 @@ class Login{
     
     function wFicheiro($texto){
         $file = '../logs.txt';
-        $current = file_get_contents($file);
+        if (file_exists($file)) {
+            $current = file_get_contents($file);
+        } else {
+            $current = '';
+        }
         $current .= $texto."\n";
         file_put_contents($file, $current);
     }
 
-    
+    function log_Login($texto){
+        $file = '../login_logs.txt';
+        if (file_exists($file)) {
+            $current = file_get_contents($file);
+        } else {
+            $current = '';
+        }
+        $current .= $texto."\n";
+        file_put_contents($file, $current);
+    }
 }
 
 ?>
