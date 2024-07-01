@@ -395,7 +395,7 @@
         }
         
         function wFicheiro($texto){
-            $file = '../upload_logs.txt';
+            $file = '../capaFilme_Upload_logs.txt';
             $current = file_get_contents($file);
             $current .= $texto."\n";
             file_put_contents($file, $current);

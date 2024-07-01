@@ -80,6 +80,15 @@ class Login{
         $stmt->close();
         $conn->close();
         
+        //log_login - set params and time
+        date_default_timezone_set('Europe/Lisbon');
+        $current_time = date('Y-m-d H:i:s');
+        $log = $row['id']."-".$row['user']."-".$current_time;
+        //log_login
+        $file = '../login_logs.txt';
+        $current = file_get_contents($file);
+        $current .= $log."\n";
+        file_put_contents($file, $current);
         return (json_encode(array(
             "msg" => $msg,
             "flag" => $flag
@@ -166,6 +175,8 @@ class Login{
         $current .= $texto."\n";
         file_put_contents($file, $current);
     }
+
+    
 }
 
 ?>
