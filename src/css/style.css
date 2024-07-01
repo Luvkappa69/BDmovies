@@ -1,0 +1,44 @@
+html{
+    background-image: linear-gradient(114.95deg, rgba(242, 94, 255, 0.5) 0%, rgba(162, 181, 231, 0.829) 34.35%), linear-gradient(180deg, #a5e6f5 0%, #FFA7A7 100%), linear-gradient(244.35deg, #FFB26A 0%, #3676B1 50.58%, #00A3FF 100%), linear-gradient(244.35deg, #FFFFFF 0%, #004A74 49.48%, #FF0000 100%), radial-gradient(100% 233.99% at 0% 100%, #B70000 0%, #d98efc 100%), linear-gradient(307.27deg, #1DAC92 0.37%, #ffffff 100%), radial-gradient(100% 140% at 100% 0%, #EAFF6B 0%, #79a9af 57.29%, #aa96f8 100%);
+    background-blend-mode: hard-light, overlay, overlay, overlay, difference, difference, normal;
+
+}
+body{
+    background-image: linear-gradient(114.95deg, rgba(242, 94, 255, 0.5) 0%, rgba(162, 181, 231, 0.829) 34.35%), linear-gradient(180deg, #a5e6f5 0%, #FFA7A7 100%), linear-gradient(244.35deg, #FFB26A 0%, #3676B1 50.58%, #00A3FF 100%), linear-gradient(244.35deg, #FFFFFF 0%, #004A74 49.48%, #FF0000 100%), radial-gradient(100% 233.99% at 0% 100%, #B70000 0%, #d98efc 100%), linear-gradient(307.27deg, #1DAC92 0.37%, #ffffff 100%), radial-gradient(100% 140% at 100% 0%, #EAFF6B 0%, #79a9af 57.29%, #aa96f8 100%);
+    background-blend-mode: hard-light, overlay, overlay, overlay, difference, difference, normal;
+    height: 959px;
+}
+
+.nav-link{
+    color: rgb(255, 255, 255);
+}
+.activemenu{
+    font-weight: bold;
+    color: rgb(233, 97, 204);
+}
+.activemenu:active{
+    color: white;
+}
+.nav-link:hover{
+    color: rgb(56, 18, 87);
+}
+
+
+.card{
+    background-image: linear-gradient(114.95deg, rgba(235, 0, 255, 0.5) 0%, rgba(0, 71, 255, 0) 34.35%), linear-gradient(180deg, #004B5B 0%, #FFA7A7 100%), linear-gradient(244.35deg, #FFB26A 0%, #3676B1 50.58%, #00A3FF 100%), linear-gradient(244.35deg, #FFFFFF 0%, #004A74 49.48%, #FF0000 100%), radial-gradient(100% 233.99% at 0% 100%, #B70000 0%, #AD00FF 100%), linear-gradient(307.27deg, #1DAC92 0.37%, #2800C6 100%), radial-gradient(100% 140% at 100% 0%, #EAFF6B 0%, #006C7A 57.29%, #2200AA 100%);
+    background-blend-mode: hard-light, overlay, overlay, overlay, difference, difference, normal;
+
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 12px rgb(101, 36, 221);
+}
+
+img{
+    width: 300px;
+}
+
+
+select {
+    width: 100%;
+    height: 100%;
+}
