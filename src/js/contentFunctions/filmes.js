@@ -309,7 +309,32 @@ function getSelectclassificacao() {
     });
 }
 
+function pesquisar() {
+  let dados = new FormData();
+  dados.append('op', 9);
 
+
+
+  $.ajax({
+    url: controllerPath,
+    method: "POST",
+    data: dados,
+    dataType: "html",
+    cache: false,
+    contentType: false,
+    processData: false,
+  })
+
+    .done(function (msg) {
+      $('#codigoClassificacao').html(msg);
+      $('#codigoClassificacaoEdit').html(msg);
+
+    })
+
+    .fail(function (jqXHR, textStatus) {
+      alert("Request failed: " + textStatus);
+    });
+}
 
 
 
