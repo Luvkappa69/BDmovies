@@ -30,13 +30,24 @@
                         <li><a class="dropdown-item <?= isActive('listaCinemas.php') ?>" href="listaCinemas.php">Listar</a></li>
                     </ul>
                 </li>
-                <li class="nav-item dropdown <?= isActive('cinemas.php') ?> <?= isActive('listaCinemas.php') ?>">
+
+                <li class="nav-item dropdown <?= isActive('filmes.php') ?> <?= isActive('listaFilmes.php') ?>">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Filmes
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item <?= isActive('filmes.php') ?>" href="filmes.php">Adicionar</a></li>
                         <li><a class="dropdown-item <?= isActive('listaFilmes.php') ?>" href="listaFilmes.php">Listar</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown <?= isActive('sessoes.php') ?> <?= isActive('listaSessoes.php') ?>">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sessões
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item <?= isActive('sessoes.php') ?>" href="sessoes.php">Adicionar</a></li>
+                        <li><a class="dropdown-item <?= isActive('listaSessoes.php') ?>" href="listaSessoes.php">Listar</a></li>
                     </ul>
                 </li>
                 
@@ -80,6 +91,18 @@
                         <li><a class="dropdown-item <?= isActive('filmes.php') ?>" href="filmes.php">Adicionar</a></li>
                         <li><a class="dropdown-item <?= isActive('listaFilmes.php') ?>" href="listaFilmes.php">Listar</a></li>
                     </ul>
+                </li>
+                <li class="nav-item dropdown <?= isActive('sessoes.php') ?> <?= isActive('listaSessoes.php') ?>">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sessões
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item <?= isActive('sessoes.php') ?>" href="sessoes.php">Adicionar</a></li>
+                        <li><a class="dropdown-item <?= isActive('listaSessoes.php') ?>" href="listaSessoes.php">Listar</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item <?= isActive('main.php') ?>">
+                    <a class="nav-link" href="main.php" role="button" aria-expanded="false">Profile</a>
                 </li>
                 
             </ul>
