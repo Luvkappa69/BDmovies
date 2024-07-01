@@ -126,8 +126,7 @@
 
                         $msg .= "<th scope='row'>Sem resultados</th>";
                         $msg .= "<td>Sem resultados</td>";
-                        $msg .= "<td>Sem resultados</td>";                                 
-                        $msg .= "<td>Sem resultados</td>";                                 
+                                
 
                         $msg .= "<td></td>";
                         $msg .= "<td></td>";

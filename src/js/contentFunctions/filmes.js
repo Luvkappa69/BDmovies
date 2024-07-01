@@ -83,7 +83,11 @@ function listagemFilmes() {
         $('#tableFilmes').DataTable().destroy();
       }
       $('#tableFilmes').html(msg);
-      $('#tableFilmesTable').DataTable();
+      $('#tableFilmesTable').DataTable({
+        "columnDefs": [{
+          "targets": '_all',
+          "defaultContent": ""
+        }]})
     })
 
     .fail(function (jqXHR, textStatus) {

@@ -83,7 +83,11 @@ function listagem_Sessao() {
         $('#tableSessoes').DataTable().destroy();
       }
       $('#tableSessoes').html(msg);
-      $('#tableSessoesTable').DataTable();
+      $('#tableSessoesTable').DataTable({
+        "columnDefs": [{
+          "targets": '_all',
+          "defaultContent": ""
+        }]})
     })
 
     .fail(function (jqXHR, textStatus) {

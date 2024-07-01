@@ -92,7 +92,11 @@ function listagemCinema() {
         $('#tableCinemas').DataTable().destroy();
       }
       $('#tableCinemas').html(msg);
-      $('#tableCinemasTable').DataTable();
+      $('#tableCinemasTable').DataTable({
+        "columnDefs": [{
+          "targets": '_all',
+          "defaultContent": ""
+        }]})
     })
 
     .fail(function (jqXHR, textStatus) {
