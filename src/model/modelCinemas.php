@@ -110,7 +110,9 @@
                             $msg .= "<td>" . $row['localidade_cinema'] . "</td>";
                             $msg .= "<td>" . $row['dataInau_cinema'] . "</td>";
 
-                            session_start();
+                            if (session_status() == PHP_SESSION_NONE) {
+                                session_start();
+                            }
                         
                             if(isset($_SESSION['utilizador']) && $_SESSION['tipo'] == 1){ 
 

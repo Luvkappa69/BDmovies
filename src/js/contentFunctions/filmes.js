@@ -309,8 +309,14 @@ function getSelectclassificacao() {
     });
 }
 
+
+
+
+
+
 function pesquisar() {
   let dados = new FormData();
+  dados.append('pesquisaFilme', $('#pesquisaFilme').val());
   dados.append('op', 9);
 
 
@@ -326,8 +332,52 @@ function pesquisar() {
   })
 
     .done(function (msg) {
-      $('#codigoClassificacao').html(msg);
-      $('#codigoClassificacaoEdit').html(msg);
+      let data = JSON.parse(msg);
+
+      let cinemaHtml = '';
+      let sessaoHtml = '';
+
+      data.forEach(item => {
+        cinemaHtml += '<p>' + item.nome_cinema + '</p>';
+        sessaoHtml += '<p>' + item.dataHora + '</p>';
+    });
+
+      $('#cinemaDoFilme').html(cinemaHtml);
+      $('#sessaoDoFilme').html(sessaoHtml);
+
+    })
+
+    .fail(function (jqXHR, textStatus) {
+      alert("Request failed: " + textStatus);
+    });
+}
+
+
+
+
+
+
+
+function getSelect_Filme() {
+
+  let dados = new FormData();
+  dados.append('op', 10);
+
+
+
+  $.ajax({
+    url: controllerPath,
+    method: "POST",
+    data: dados,
+    dataType: "html",
+    cache: false,
+    contentType: false,
+    processData: false,
+  })
+
+    .done(function (msg) {
+      $('#pesquisaFilme').html(msg);
+
 
     })
 
@@ -344,6 +394,7 @@ function pesquisar() {
 $(function () {
   listagemFilmes();
   getSelectclassificacao()
+  getSelect_Filme()
   $('#tableFilmesTable').DataTable();
   $('.select2').select2();
 });

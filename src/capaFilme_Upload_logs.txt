@@ -1,0 +1,4 @@
+../imagens/Filme 1/_CAPA20240702004318.jpg
+../imagens/Filme 3/_CAPA20240702004500.jpeg
+../imagens/Filme 4/_CAPA20240702004520.jpeg
+../imagens/Filme 1/_CAPA20240702004542.jpg

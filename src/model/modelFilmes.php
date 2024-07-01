@@ -107,7 +107,9 @@
                             $msg .= "<td>" . $row['ano'] . "</td>";
 
 
-                            session_start();
+                            if (session_status() == PHP_SESSION_NONE) {
+                                session_start();
+                            }
                         
                             if(isset($_SESSION['utilizador']) && $_SESSION['tipo'] == 1){ 
 
@@ -395,9 +397,86 @@
         
         function wFicheiro($texto){
             $file = '../capaFilme_Upload_logs.txt';
-            $current = file_get_contents($file);
+            if (file_exists($file)) {
+                $current = file_get_contents($file);
+            } else {
+                $current = '';
+            }
             $current .= $texto."\n";
             file_put_contents($file, $current);
+        }
+
+
+
+
+
+
+
+        function pesquisa($idFilme) {
+            global $conn;
+        
+            // First query to get all sessions
+            $stmt = $conn->prepare("SELECT * FROM sessao WHERE sessao.idImbdFilme = ?");
+            $stmt->bind_param("i", $idFilme);
+            $stmt->execute();
+        
+            $result = $stmt->get_result();
+            $sessoes = [];
+        
+            while ($sessao = $result->fetch_assoc()) {
+                // Second query to get the cinema name for each session
+                $codigoSala = $sessao['codigoSala'];
+                $stmtCinema = $conn->prepare("SELECT nome_cinema FROM cinema WHERE codigo = ?");
+                $stmtCinema->bind_param("i", $codigoSala);
+                $stmtCinema->execute();
+        
+                $resultCinema = $stmtCinema->get_result();
+                $cinema = $resultCinema->fetch_assoc();
+        
+                // Combine session data with cinema name
+                if ($cinema) {
+                    $sessao['nome_cinema'] = $cinema['nome_cinema'];
+                } else {
+                    $sessao['nome_cinema'] = null; // Or some default value if cinema not found
+                }
+        
+                $sessoes[] = $sessao;
+        
+                $stmtCinema->close();
+            }
+        
+            $stmt->close();
+            $conn->close();
+        
+            return json_encode($sessoes);
+        }
+        
+
+
+
+
+
+        function getSelect_Filme(){
+            global $conn;
+            $msg = "<option value = '-1'>Escolha uma opção</option>";
+            $stmt = "";
+
+
+            $stmt = $conn->prepare("SELECT * FROM filme;");
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $msg .= "<option value = '".$row['idImbd']."'>".$row['nome']."</option>";
+                }
+            } else {
+                $msg .= "<option value = '-1'>Sem Cinemas</option>";
+            }
+            $stmt->close(); 
+            $conn->close();
+            
+            return $msg;
         }
     }
 

@@ -45,5 +45,13 @@ else if($_POST['op'] == 7){
     $resultado = $filme -> getSelectClassificacao();
     echo($resultado);
 }
+else if($_POST['op'] == 10){
+    $resultado = $filme -> getSelect_Filme();
+    echo($resultado);
+}
+else if($_POST['op'] == 9){
+    $resultado = $filme -> pesquisa($_POST["pesquisaFilme"]);
+    echo($resultado);
+}
 
 ?>

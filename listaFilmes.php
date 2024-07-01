@@ -36,12 +36,14 @@
 
             <div class="col-md-4 card">
               <h3 class="card-header">Cinema</h3>
-              <div id="cinemaDoFilme"></div>
+              <div id="cinemaDoFilme">
+
+              </div>
             </div>
 
             <div class="col-md-1 "></div>
             
-            <div class="col-md-4 card">
+            <div class="col-md-6 card">
               <h3 class="card-header">Sessões Disponiveis</h3>
               <div id="sessaoDoFilme">
 
