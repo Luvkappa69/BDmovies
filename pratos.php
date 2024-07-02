@@ -45,7 +45,7 @@
 
 
           <div class="col-12">
-            <button type="button" class="btn btn-primary" onclick="regista_prato()">Registar</button>
+            <button type="button" class="btn btn-primary" onclick="regista()">Registar</button>
           </div>
         </form>
       </div>

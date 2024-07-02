@@ -20,7 +20,7 @@
                 $foto,                    //Content
                 'foto',            //Js into PHP variable name
                 "_prato",                  //Nome do ficheiro
-                $nome                   //Pasta
+                md5($nome)                   //Pasta
                 );
             $upload = json_decode($upload, TRUE);
 
@@ -92,9 +92,11 @@
             $msg .= "</thead>";
             $msg .= "<tbody>";
         
-            $stmt = $conn->prepare("SELECT * FROM pretos;"); 
+            $stmt = $conn->prepare("SELECT pratos.*,
+            tipoprato.descricao as descPrato
+            FROM pratos, tipoprato
+            where pratos.idTipo = tipoprato.id;"); 
 
-            
         
             if ($stmt) { 
                 if ($stmt->execute()) { 
@@ -104,9 +106,9 @@
                             $msg .= "<tr>";
 
                             $msg .= "<td><img src=".$row['foto']." class='img-thumbnail img-size'></td>";
-                            $msg .= "<th scope='row'>" . $row['Nome'] . "</th>";
-                            $msg .= "<td>" . $row['preco'] . "</td>";
-                            $msg .= "<td>" . $row['idTipo'] . "</td>";
+                            $msg .= "<th scope='row'>" . $row['nome'] . "</th>";
+                            $msg .= "<td>" . $row['preco'] . "€</td>";
+                            $msg .= "<td>" . $row['descPrato'] . "</td>";
 
 
                             if (session_status() == PHP_SESSION_NONE) {
@@ -234,52 +236,74 @@
 
 
         function edita(
-        $nome,
-        $preco,
-        $idTipo,
-        $telefone,
-        $email,
-        $oldKEY) {
+                        $nome,
+                        $preco,
+                        $idTipo,
+                        $foto,
+                        $oldKEY
+                        ) {
             global $conn;
           
             $msg = "";
             $stmt = "";
         
-            $stmt = $conn->prepare("UPDATE clientes,reserva SET 
-                                    nif = ?,
+            $upload = $this -> uploads(
+                $foto,                    //Content
+                'foto',            //Js into PHP variable name
+                "_prato",                  //Nome do ficheiro
+                md5($nome)                   //Pasta
+                );
+            $upload = json_decode($upload, TRUE);
+
+
+            if($resp['flag']){
+                
+                $stmt = $conn->prepare("UPDATE pratos SET 
                                     nome = ?,
-                                    morada = ?,
-                                    telefone = ?,
-                                    email = ?,
-                                    reserva.idCliente = ?
-                                    WHERE nif = ?;");
+                                    preco = ?,
+                                    idTipo = ?,
+                                    foto = ?
+                                    WHERE id_imovel = ? ;");
         
-            if ($stmt) { 
-                $stmt->bind_param("issisii",
-                $nif,
+ 
+                $stmt->bind_param("siisi", 
                 $nome,
-                $morada,
-                $telefone,
-                $email,
-                $nif,
-                $oldKEY
-            );
+                $preco,
+                $idTipo,
+                $resp['target'],
+                $oldKEY);
+            
+            }else{
+                $stmt = $conn->prepare("UPDATE pratos SET 
+                                    nome = ?,
+                                    preco = ?,
+                                    idTipo = ?
+
+                                    WHERE id = ? ;");
         
-                if ($stmt->execute()) {
-                    $msg = "Edição efetuada";
-                } else {
-                    $msg = "Erro ao editar: " . $stmt->error; 
-                }
-                $stmt->close(); 
+    
+                $stmt->bind_param("siii", 
+                $nome,
+                $preco,
+                $idTipo,
+                $oldKEY);
+            }
+        
+            if ($stmt->execute()) {
+                $msg = "Edição efetuada";
             } else {
-                $msg = "Erro ao preparar a declaração: " . $conn->error;  
+                $msg = "Erro ao editar: " . $stmt->error; 
             }
 
+            $stmt->close(); 
+            
+            
             $conn->close();
-        
+            
             return $msg;
+            }
 
-        }
+        
 
 
 
@@ -349,6 +373,38 @@
             file_put_contents($file, $current);
         }
         
+
+
+        function getSelect_tipoPrato(){
+            global $conn;
+            $msg = "<option value = '-1'>Escolha uma opção</option>";
+            $stmt = "";
+
+
+            $stmt = $conn->prepare("SELECT * FROM tipoprato;");
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $msg .= "<option value = '".$row['id']."'>".$row['descricao']."</option>";
+                }
+            } else {
+                $msg .= "<option value = '-1'>Sem Tipos de Prato</option>";
+            }
+            $stmt->close(); 
+            $conn->close();
+            
+            return $msg;
+        }
+
+
+
+
+
+
+
+
 
 
     }

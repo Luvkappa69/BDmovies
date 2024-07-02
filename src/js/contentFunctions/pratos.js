@@ -155,11 +155,10 @@ function edita(key) {
       let obj = JSON.parse(msg);
 
       $('#idEdit').val(obj.id);
-      $('#nifEdit').val(obj.nif);
       $('#nomeEdit').val(obj.nome);
-      $('#moradaEdit').val(obj.morada);
-      $('#telefoneEdit').val(obj.telefone);
-      $('#emailEdit').val(obj.email);
+      $('#precoEdit').val(obj.preco);
+      $('#idTipoEdit').val(obj.idTipo);
+
   
       $('#editModal_cliente').modal('toggle');
       $('#btnGuardarEdit_cliente').attr('onclick', 'guardaEdit_cliente(' + obj.nif + ')')
@@ -239,7 +238,34 @@ function alerta(icon, msg) {
 
 
 
+function getSelect_tipoPratos() {
 
+  let dados = new FormData();
+  dados.append('op', 10);
+
+
+
+  $.ajax({
+    url: controllerPath,
+    method: "POST",
+    data: dados,
+    dataType: "html",
+    cache: false,
+    contentType: false,
+    processData: false,
+  })
+
+    .done(function (msg) {
+      $('#idTipo').html(msg);
+      $('#idTipoEdit').html(msg);
+
+
+    })
+
+    .fail(function (jqXHR, textStatus) {
+      alert("Request failed: " + textStatus);
+    });
+}
 
 
 
@@ -250,6 +276,7 @@ $(function () {
   listagem();
   $('#tablePratos').DataTable();
   $('#idTipo').select2();
+  getSelect_tipoPratos()
   
 });
 

@@ -1,5 +1,5 @@
 <?php
-require_once '../model/modelClientes.php';
+require_once '../model/modelPratos.php';
 
 $prato =  new Prato();
 
@@ -33,6 +33,10 @@ if($_POST['op'] == 1){
                                                 $_FILES, 
                                                 $_POST['old_key']
     );
+    echo($resultado);
+}
+else if($_POST['op'] == 10){
+    $resultado = $prato -> getSelect_tipoPrato();
     echo($resultado);
 }
 
