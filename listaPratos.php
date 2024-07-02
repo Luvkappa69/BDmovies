@@ -9,7 +9,7 @@
 <head>
     <?php include_once 'assets/main/docHead.html' ?>
 
-    <script src="src/js/contentFunctions/clientes.js"></script>
+    <script src="src/js/contentFunctions/pratos.js"></script>
 
 </head>
 
@@ -18,11 +18,11 @@
 
     <div class="container">
         <div class="row mx-5 mb-5">
-            <div id="tableClientes"></div>
+            <div id="tablePratos"></div>
         </div>
     </div>
     
-    <?php include_once 'assets/clientesModal.html' ?>
+    <?php include_once 'assets/pratosModal.html' ?>
 </body>
 </html>
 <?php 

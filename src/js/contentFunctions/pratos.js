@@ -1,24 +1,21 @@
-let controllerPath = "src/controller/controllerClientes.php"
+let controllerPath = "src/controller/controllerPratos.php"
 
 
-function regista_cliente() {
+function regista() {
   if (
-    $('#nif').val() =="" ||
     $('#nome').val() =="" ||
-    $('#morada').val() =="" ||
-    $('#telefone').val() =="" ||
-    $('#email').val() =="" 
-
+    $('#preco').val() =="" ||
+    $('#idTipo').val() ==-1 ||
+    $('#foto').val() =="" 
   ){
     return alerta("error", "Por favor preencha os campos ...");
 }
 
   let dados = new FormData();
-  dados.append('nif', $('#nif').val());
   dados.append('nome', $('#nome').val());
-  dados.append('morada', $('#morada').val());
-  dados.append('telefone', $('#telefone').val());
-  dados.append('email', $('#email').val());
+  dados.append('preco', $('#preco').val());
+  dados.append('idTipo', $('#idTipo').val());
+  dados.append('foto', $('#foto').prop('files')[0]); //image 🖼️
   
   dados.append('op', 1);
 
@@ -34,13 +31,11 @@ function regista_cliente() {
   })
 
     .done(function (msg) {
-      if (msg == 0){
-        alerta("error", "Contacto incorreto, verifique (NIF, TELEFONE)");
-      } else{
-        alerta("success", msg);
-      }
+
+      alerta("success", msg);
+
       
-      listagem_cliente();
+      listagem();
     })
 
     .fail(function (jqXHR, textStatus) {
@@ -61,7 +56,7 @@ function regista_cliente() {
 
 
 
-function listagem_cliente() {
+function listagem() {
 
   let dados = new FormData();
   dados.append('op', 2);
@@ -79,11 +74,11 @@ function listagem_cliente() {
 
     .done(function (msg) {
       
-      if ($.fn.DataTable.isDataTable('#tableClientes')) {
-        $('#tableClientes').DataTable().destroy();
+      if ($.fn.DataTable.isDataTable('#tablePratos')) {
+        $('#tablePratos').DataTable().destroy();
       }
-      $('#tableClientes').html(msg);
-      $('#tableClientesTable').DataTable({
+      $('#tablePratos').html(msg);
+      $('#tablePratosTable').DataTable({
         "columnDefs": [{
           "targets": '_all',
           "defaultContent": ""
@@ -105,11 +100,11 @@ function listagem_cliente() {
 
 
 
-function remover_cliente(key) {
+function remover(key) {
 
   let dados = new FormData();
   dados.append('op', 3);
-  dados.append('nif', key);
+  dados.append('id', key);
 
   $.ajax({
     url: controllerPath,
@@ -123,7 +118,7 @@ function remover_cliente(key) {
 
     .done(function (msg) {
       alerta("success", msg);
-      listagem_cliente();
+      listagem();
     })
 
     .fail(function (jqXHR, textStatus) {
@@ -140,11 +135,11 @@ function remover_cliente(key) {
 
 
 
-function edita_cliente(key) {
+function edita(key) {
 
   let dados = new FormData();
   dados.append('op', 4);
-  dados.append('nif', key);
+  dados.append('id', key);
 
   $.ajax({
     url: controllerPath,
@@ -159,6 +154,7 @@ function edita_cliente(key) {
     .done(function (msg) {
       let obj = JSON.parse(msg);
 
+      $('#idEdit').val(obj.id);
       $('#nifEdit').val(obj.nif);
       $('#nomeEdit').val(obj.nome);
       $('#moradaEdit').val(obj.morada);
@@ -181,15 +177,14 @@ function edita_cliente(key) {
 
 
 
-function guardaEdit_cliente(key) {
+function guardaEdit(key) {
 
   let dados = new FormData();
 
-  dados.append('nif', $('#nifEdit').val());
   dados.append('nome', $('#nomeEdit').val());
-  dados.append('morada', $('#moradaEdit').val());
-  dados.append('telefone', $('#telefoneEdit').val());
-  dados.append('email', $('#emailEdit').val());
+  dados.append('preco', $('#precoEdit').val());
+  dados.append('idTipo', $('#idTipoEdit').val());
+  dados.append('foto', $('#fotoEdit').prop('files')[0]); //image 🖼️
 
 
   dados.append('old_key', key);
@@ -209,7 +204,7 @@ function guardaEdit_cliente(key) {
 
     .done(function (msg) {
       alerta("success", msg);
-      listagem_cliente();
+      listagem();
     })
 
     .fail(function (jqXHR, textStatus) {
@@ -252,8 +247,10 @@ function alerta(icon, msg) {
 
 
 $(function () {
-  listagem_cliente();
-  $('#tableClientesTable').DataTable();
+  listagem();
+  $('#tablePratos').DataTable();
+  $('#idTipo').select2();
+  
 });
 
 

@@ -1,57 +1,72 @@
 <?php
     require_once 'utilities/connection.php';
-    require_once 'utilities/validadores.php';
+    //require_once 'utilities/validadores.php';
 
-    class Cliente{
+    class Prato{
 
         function regista(
-                                $nif,
                                 $nome,
-                                $morada,
-                                $telefone,
-                                $email
+                                $preco,
+                                $idTipo,
+                                $foto
                                 ) {
             global $conn;
             $msg = "";
             $stmt = "";
 
-            if(
-                !validateNine($telefone) &&
-                !validateNine($nif)
-                
-            ){
-                
-                $stmt = $conn->prepare("INSERT INTO clientes (nif, nome, morada, telefone, email) 
-                VALUES (?, ?, ?, ?, ?)");
-            
-                $stmt->bind_param("issis", 
-                                            $nif,
-                                            $nome,
-                                            $morada,
-                                            $telefone,
-                                            $email
-                                            );
-            
-                if ($stmt->execute()) {
-                    $msg = "Registado com sucesso!";
-                } else {
-                    $msg = "Erro ao registar: " . $stmt->error;  
-                } 
 
-                $stmt->close();
+            
+            $upload = $this -> uploads(
+                $foto,                    //Content
+                'foto',            //Js into PHP variable name
+                "_prato",                  //Nome do ficheiro
+                $nome                   //Pasta
+                );
+            $upload = json_decode($upload, TRUE);
+
+
+            if($upload['flag']){
+                $stmt = $conn->prepare("INSERT INTO pratos (nome, preco, idTipo, foto) 
+                VALUES (?, ?, ?, ?);");
+                $stmt->bind_param("siis", 
+                $nome,
+                $preco,
+                $idTipo,
+                $upload['target']);
+            }else{
+                $stmt = $conn->prepare("INSERT INTO pratos (nome, preco, idTipo)
+            VALUES (?, ?, ?)");
+        
+            $stmt->bind_param("sii", 
+                                    $nome,
+                                    $preco,
+                                    $idTipo
+                                        );
+            }
+
+
+
+        
+         
+            
+            if ($stmt->execute()) {
+                $msg = "Registado com sucesso!";
+            } else {
+                $msg = "Erro ao registar: " . $stmt->error;  
+            } 
+
+            $stmt->close();
                 
 
-            }
-            else{
-                $msg = 0;
-            }
+            
+          
             
             
             $conn->close();
             return $msg;
         }
         
-
+        
 
 
 
@@ -61,15 +76,14 @@
 
         function lista() {
             global $conn;
-            $msg = "<table class='table' id='tableClientesTable'>";
+            $msg = "<table class='table' id='tablePratosTable'>";
             $msg .= "<thead>";
             $msg .= "<tr>";
         
-            $msg .= "<th>nif</th>";
-            $msg .= "<th>nome</th>";
-            $msg .= "<th>morada</th>";
-            $msg .= "<th>telefone</th>";
-            $msg .= "<th>email</th>";
+            $msg .= "<th>Foto</th>";
+            $msg .= "<th>Nome</th>";
+            $msg .= "<th>Preço</th>";
+            $msg .= "<th>Tipo de Prato</th>";
           
             $msg .= "<td>Remover</td>";
             $msg .= "<td>Editar</td>";
@@ -78,7 +92,7 @@
             $msg .= "</thead>";
             $msg .= "<tbody>";
         
-            $stmt = $conn->prepare("SELECT * FROM clientes;"); 
+            $stmt = $conn->prepare("SELECT * FROM pretos;"); 
 
             
         
@@ -89,11 +103,11 @@
                         while ($row = $result->fetch_assoc()) {
                             $msg .= "<tr>";
 
-                            $msg .= "<th scope='row'>" . $row['nif'] . "</th>";
-                            $msg .= "<td>" . $row['nome'] . "</td>";
-                            $msg .= "<td>" . $row['morada'] . "</td>";
-                            $msg .= "<td>" . $row['telefone'] . "</td>";
-                            $msg .= "<td>" . $row['email'] . "</td>";
+                            $msg .= "<td><img src=".$row['foto']." class='img-thumbnail img-size'></td>";
+                            $msg .= "<th scope='row'>" . $row['Nome'] . "</th>";
+                            $msg .= "<td>" . $row['preco'] . "</td>";
+                            $msg .= "<td>" . $row['idTipo'] . "</td>";
+
 
                             if (session_status() == PHP_SESSION_NONE) {
                                 session_start();
@@ -101,23 +115,23 @@
                         
                             if(isset($_SESSION['utilizador']) && $_SESSION['tipo'] == 1){ 
 
-                                $msg .= "<td><button type='button' class='btn btn-danger' onclick='remover_cliente(" . $row['nif'] . ")'>Remover</button></td>";
+                                $msg .= "<td><button type='button' class='btn btn-danger' onclick='remover(" . $row['id'] . ")'>Remover</button></td>";
                             }else{
                                 $msg .= "<td><button type='button' class='btn btn-danger' disabled>Remover</button></td>";
 
                             }
-                            $msg .= "<td><button type='button' class='btn btn-primary' onclick='edita_cliente(" . $row['nif'] . ")'>Editar</button></td>";
+                            $msg .= "<td><button type='button' class='btn btn-primary' onclick='edita(" . $row['id'] . ")'>Editar</button></td>";
                             $msg .= "</tr>";
                         }
                         $result->free(); 
                     } else {
                         $msg .= "<tr>";
 
-                        $msg .= "<th scope='row'>Sem resultados</th>";
                         $msg .= "<td>Sem resultados</td>";
+                        $msg .= "<th scope='row'>Sem resultados</th>";
                         $msg .= "<td>Sem resultados</td>";                   
                         $msg .= "<td>Sem resultados</td>";                   
-                        $msg .= "<td>Sem resultados</td>";                                    
+                    ;                                    
 
                         $msg .= "<td></td>";
                         $msg .= "<td></td>";
@@ -160,8 +174,8 @@
             $msg = "";
             $stmt = "";
         
-            $stmt = $conn->prepare("DELETE FROM clientes
-                                    WHERE nif = ?");
+            $stmt = $conn->prepare("DELETE FROM pratos
+                                    WHERE id = ?");
         
             $stmt->bind_param("i", $codigo); 
         
@@ -194,7 +208,7 @@
             global $conn;
 
 
-            $stmt = $conn->prepare("SELECT * FROM clientes WHERE nif = ?");
+            $stmt = $conn->prepare("SELECT * FROM pratos WHERE id = ?");
             $stmt->bind_param("i", $codigo);
             $stmt->execute();
     
@@ -220,9 +234,9 @@
 
 
         function edita(
-        $nif,
         $nome,
-        $morada,
+        $preco,
+        $idTipo,
         $telefone,
         $email,
         $oldKEY) {
@@ -265,6 +279,74 @@
         
             return $msg;
 
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function uploads($img, $html_soul, $presetName, $pasta){
+
+            $dir = "../imagens/".$pasta."/";
+            $dir1 = "src/imagens/".$pasta."/";
+            $flag = false;
+            $targetBD = "";
+        
+            if(!is_dir($dir)){
+                if(!mkdir($dir, 0777, TRUE)){
+                    die ("Erro não é possivel criar o diretório");
+                }
+            }
+        
+            if(array_key_exists($html_soul, $img)){
+                if(is_array($img)){
+                    if(is_uploaded_file($img[$html_soul]['tmp_name'])){
+                        $fonte = $img[$html_soul]['tmp_name'];
+                        $ficheiro = $img[$html_soul]['name'];
+                        $end = explode(".",$ficheiro);
+                        $extensao = end($end);
+                
+                        $newName =$presetName.date("YmdHis").".".$extensao;
+                
+                        $target = $dir.$newName;
+                        $targetBD = $dir1.$newName;
+        
+                        $this -> wFicheiro($target);
+                
+                        $flag = move_uploaded_file($fonte, $target);
+                        
+                    } 
+                }
+            }
+            return (json_encode(array(
+                "flag" => $flag,
+                "target" => $targetBD
+            )));
+        }
+        
+        function wFicheiro($texto){
+            $file = '../prato_Upload_logs.txt';
+            if (file_exists($file)) {
+                $current = file_get_contents($file);
+            } else {
+                $current = '';
+            }
+            $current .= $texto."\n";
+            file_put_contents($file, $current);
         }
         
 

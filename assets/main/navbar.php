@@ -5,8 +5,8 @@
         }
     }
     //nav contents:
-    $labels = ['Reserva', 'Prato', 'Pedido',"Clientes"];
-    $mainFiles = ['reservas.php', 'prato.php', 'pedido.php', "clientes.php"];
+    $labels = ['Reserva', 'Pratos', 'Pedido',"Clientes"];
+    $mainFiles = ['reservas.php', 'pratos.php', 'pedido.php', "clientes.php"];
     $listFiles = ['listaReservas.php', 'listaPratos.php', 'listaPedido.php', "listaClientes.php"];
 
 
