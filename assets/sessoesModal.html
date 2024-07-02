@@ -1,0 +1,43 @@
+<!-- Modal -->
+<div class="modal fade" id="editModalSessao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Filme</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form class="row g-3">
+
+
+            <div class="col-md-4">
+              <label for="dataHoraEdit" class="form-label">Data/Hora</label>
+              <input type="date" class="form-control" id="dataHoradateEdit">
+            <input type="time" class="form-control" id="dataHoratimeEdit">
+            </div>
+            
+            <div class="col-md-4">
+                <label for="codigoSalaEdit" class="form-label">Cinema</label>
+                <select class="form-select " aria-label="Default select example" id="codigoSalaEdit">
+                </select>
+              </div>
+            <div class="col-md-4">
+                <label for="idImbdFilmeEdit" class="form-label">Filme</label>
+                <select class="form-select " aria-label="Default select example" id="idImbdFilmeEdit">
+                </select>
+              </div>
+              
+
+
+
+          </form>
+          <br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnGuardarEditSessao">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>

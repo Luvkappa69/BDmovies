@@ -1,0 +1,46 @@
+<!-- Modal -->
+<div class="modal fade" id="editModalFilme" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Filme</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <form class="row g-3">
+
+            <img src="" alt="" id="capaFilme">
+
+            <div class="col-md-3">
+              <label for="idImbdEdit" class="form-label">ID IMDB</label>
+              <input type="number" class="form-control" id="idImbdEdit">
+            </div>
+            <div class="col-md-3">
+              <label for="nomeEdit" class="form-label">Nome</label>
+              <input type="text" class="form-control" id="nomeEdit">
+            </div>
+            <div class="col-md-3">
+              <label for="anoEdit" class="form-label">Ano</label>
+              <input type="number" class="form-control" id="anoEdit">
+            </div>
+            <div class="col-md-6">
+                <label for="codigoClassificacaoEdit" class="form-label">Classificação</label>
+                <select class="form-select" aria-label="Default select example" id="codigoClassificacaoEdit">
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="capaEdit" class="form-label">Capa do filme</label>
+                <input type="file" class="form-control" id="capaEdit">
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="btnGuardarEditFilme">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
