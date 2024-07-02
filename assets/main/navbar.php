@@ -5,9 +5,9 @@
         }
     }
     //nav contents:
-    $labels = ['Cinemas', 'Filmes', 'Sessões'];
-    $mainFiles = ['cinemas.php', 'filmes.php', 'sessoes.php'];
-    $listFiles = ['listaCinemas.php', 'listaFilmes.php', 'listaSessoes.php'];
+    $labels = ['Reserva', 'Prato', 'Pedido',"Clientes"];
+    $mainFiles = ['reservas.php', 'prato.php', 'pedido.php', "clientes.php"];
+    $listFiles = ['listaReservas.php', 'listaPratos.php', 'listaPedido.php', "listaClientes.php"];
 
 
     if(isset($_SESSION['utilizador']) && $_SESSION['tipo'] == 1){

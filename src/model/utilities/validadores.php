@@ -7,21 +7,23 @@ function validateNine($nine) {
   return false;
 }
 
-function validatePostalCodePT($postalCode) {
-  if($postalCode == "" || strlen($postalCode) != 8){
+function verifica($data, $hora, $conn) {
+  $stmt = $conn->prepare("SELECT * FROM reserva
+  WHERE data = ? and hora = ?;");
+  $stmt->bind_param("ss", $data, $hora);
+  $stmt->execute();
+
+  $result = $stmt->get_result();
+  $row = $result->fetch_assoc();
+
+  $stmt->close();
+ 
+
+  if ($row){
     return true;
-  }
-
-  $parts = explode("-", $postalCode);
-  if (count($parts) == 2 &&
-     is_numeric($parts[0]) &&
-     is_numeric($parts[1]) &&
-     strlen($parts[0]) == 4 &&      
-     strlen($parts[1]) == 3){
+  }else{
     return false;
-  }
-
-  return true;
+  } 
 }
 
 ?>
