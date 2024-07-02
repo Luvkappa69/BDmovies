@@ -6,8 +6,8 @@
     }
     //nav contents:
     $labels = ['Reserva', 'Pratos', 'Pedido',"Clientes"];
-    $mainFiles = ['reservas.php', 'pratos.php', 'pedido.php', "clientes.php"];
-    $listFiles = ['listaReservas.php', 'listaPratos.php', 'listaPedido.php', "listaClientes.php"];
+    $mainFiles = ['reservas.php', 'pratos.php', 'pedidos.php', "clientes.php"];
+    $listFiles = ['listaReservas.php', 'listaPratos.php', 'listaPedidos.php', "listaClientes.php"];
 
 
     if(isset($_SESSION['utilizador']) && $_SESSION['tipo'] == 1){
