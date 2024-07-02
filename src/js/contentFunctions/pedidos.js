@@ -1,4 +1,4 @@
-let controllerPath = "src/controller/controllerPratos.php"
+let controllerPath = "src/controller/controllerPedidos.php"
 
 
 function regista() {
